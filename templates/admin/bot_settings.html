@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Bot Settings{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Telegram Bot Settings</h1>
+    <p class="muted">Admin can manage the notification bot token and target chat ID.</p>
+</section>
+
+<section class="panel">
+    <h2>Notification Settings</h2>
+    <form method="post" class="form-card">
+        <label>Bot Token
+            <input type="password" name="bot_token" value="{{ settings.bot_token }}" required>
+        </label>
+        <label>Admin Chat ID
+            <input type="text" name="chat_id" value="{{ settings.chat_id }}" required>
+        </label>
+        <button type="submit" class="button">Save Settings</button>
+    </form>
+    <p class="muted">The app stores these settings in <code>bot_config.json</code>. Do not include real tokens in the final ZIP.</p>
+</section>
+{% endblock %}

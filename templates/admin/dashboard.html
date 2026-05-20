@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Admin Dashboard</h1>
+    <p class="muted">System overview and recent user activity.</p>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span>Total Users</span>
+        <strong>{{ stats.total_users }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Total Records</span>
+        <strong>{{ stats.total_records }}</strong>
+    </article>
+</section>
+
+<section class="panel">
+    <h2>Recent Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in stats.recent_users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td><span class="badge {{ user.role }}">{{ user.role }}</span></td>
+                <td>{{ user.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Records{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Records Management</h1>
+    <p class="muted">Admin can create, delete, and view employee records for all users.</p>
+</section>
+
+{% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+
+<section class="panel">
+    <h2>Create Record</h2>
+    <form action="{{ url_for('admin_create_record') }}" method="post" class="grid-form">
+        <label>User
+            <select name="user_id" required>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }} ({{ user.role }})</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Name
+            <input type="text" name="name" required>
+        </label>
+        <label>Salary
+            <input type="number" name="salary" min="1" max="50000000" required>
+        </label>
+        <label>Department
+            <input type="text" name="department" required>
+        </label>
+        <label>Worked Since
+            <input type="number" name="worked_since" min="1900" max="2026" required>
+        </label>
+        <button type="submit" class="button">Create Record</button>
+    </form>
+</section>
+
+<section class="panel">
+    <h2>All Records</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Salary</th>
+                <th>Department</th>
+                <th>Worked Since</th>
+                <th>Created At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.user_id }}</td>
+                <td>{{ record.name }}</td>
+                <td>{{ "{:,}".format(record.salary) }} KZT</td>
+                <td>{{ record.department }}</td>
+                <td>{{ record.worked_since }}</td>
+                <td>{{ record.created_at }}</td>
+                <td>
+                    <form action="{{ url_for('admin_delete_record', record_id=record.id) }}" method="post" class="inline-form delete-form" data-confirm-title="Delete record?" data-confirm-message="This record will be removed from records.json.">
+                        <button type="submit" class="button danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">
+                    <div class="empty-state">
+                        <strong>No records yet.</strong>
+                        <span>Create the first employee record using the form above.</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% if page > 1 %}
+            <a class="button secondary" href="{{ url_for('admin_data', page=page - 1) }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page }} of {{ pages }}</span>
+        {% if page < pages %}
+            <a class="button secondary" href="{{ url_for('admin_data', page=page + 1) }}">Next</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

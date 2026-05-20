@@ -1,0 +1,11 @@
+# Секреты
+.env
+
+# Кэш Python
+__pycache__/
+*.pyc
+
+# Данные которые генерируются автоматически
+users.json
+records.json
+bot_config.json

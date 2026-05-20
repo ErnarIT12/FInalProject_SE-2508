@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section class="auth-panel">
+    <h1>Login</h1>
+    <p class="muted">Use seeded accounts or register a new user.</p>
+    {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+    <form method="post" class="form-card validate-auth-form">
+        <label>Username
+            <input type="text" name="username" minlength="3" required>
+        </label>
+        <label>Password
+            <input type="password" name="password" minlength="6" required>
+        </label>
+        <button type="submit" class="button">Login</button>
+    </form>
+    <p class="muted">Admin: admin / admin123. User: testuser / user123.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>User Dashboard</h1>
+    <p class="muted">Your account is read-only. You can view your own employee records here.</p>
+</section>
+
+{% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+
+<section class="panel">
+    <h2>My Records</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Salary</th>
+                <th>Department</th>
+                <th>Worked Since</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.name }}</td>
+                <td>{{ "{:,}".format(record.salary) }} KZT</td>
+                <td>{{ record.department }}</td>
+                <td>{{ record.worked_since }}</td>
+                <td>{{ record.created_at }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <strong>No records assigned yet.</strong>
+                        <span>Only an administrator can create records for your account.</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

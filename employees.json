@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "user_id": 1228859868,
+        "name": "Yernar",
+        "salary": 300000,
+        "department": "IT",
+        "worked_since": 2026
+    },
+    {
+        "id": 2,
+        "user_id": 1228859868,
+        "name": "Inal",
+        "salary": 5000000,
+        "department": "IT",
+        "worked_since": 2021
+    }
+]
