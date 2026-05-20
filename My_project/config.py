@@ -1,14 +1,18 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  
 
 
 class Config:
-    SECRET_KEY = "change-this-secret-key-before-production"
+    SECRET_KEY = os.environ.get("SECRET_KEY", "dev-fallback-key")
     DB_PATH = os.path.dirname(__file__)
-    BOT_TOKEN = "8806949111:AAHU5LlsBVVSpopOJllj78QXupBEr4oViLM"
-    CHAT_ID = "1228859868"
-    DEBUG = True
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+    CHAT_ID = os.environ.get("CHAT_ID", "")
+    DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+    WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
 
 
-# Backward-compatible constants for the Assignment 4 bot package.
+# Backward-compatible constants
 BOT_TOKEN = Config.BOT_TOKEN
-WEBHOOK_URL = "https://inconstant-jacinta-syllabically.ngrok-free.dev/webhook"
+WEBHOOK_URL = Config.WEBHOOK_URL

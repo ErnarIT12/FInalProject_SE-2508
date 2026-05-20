@@ -1,0 +1,5 @@
+.env
+__pycache__/
+*.pyc
+*.json
+!employees.json  # если нужен как шаблон

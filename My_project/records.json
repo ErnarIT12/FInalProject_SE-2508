@@ -61,5 +61,14 @@
         "department": "Manager",
         "worked_since": 2015,
         "created_at": "2026-05-20 16:16:01"
+    },
+    {
+        "id": 8,
+        "user_id": 2,
+        "name": "Hansi",
+        "salary": 2000000,
+        "department": "MI",
+        "worked_since": 2000,
+        "created_at": "2026-05-20 17:00:04"
     }
 ]
