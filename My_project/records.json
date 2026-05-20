@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "user_id": 2,
+        "name": "Aruzhan Karimova",
+        "salary": 450000,
+        "department": "Finance",
+        "worked_since": 2022,
+        "created_at": "2026-05-20 10:10:00"
+    },
+    {
+        "id": 2,
+        "user_id": 2,
+        "name": "Nursultan Bekov",
+        "salary": 800000,
+        "department": "IT",
+        "worked_since": 2020,
+        "created_at": "2026-05-20 10:12:00"
+    },
+    {
+        "id": 3,
+        "user_id": 1,
+        "name": "Madi Tulegen",
+        "salary": 1000000,
+        "department": "Management",
+        "worked_since": 2019,
+        "created_at": "2026-05-20 10:15:00"
+    },
+    {
+        "id": 4,
+        "user_id": 2,
+        "name": "Inal",
+        "salary": 600000,
+        "department": "IT",
+        "worked_since": 2010,
+        "created_at": "2026-05-20 15:37:48"
+    },
+    {
+        "id": 5,
+        "user_id": 2,
+        "name": "Ernar",
+        "salary": 10000000,
+        "department": "IT",
+        "worked_since": 1900,
+        "created_at": "2026-05-20 15:51:52"
+    },
+    {
+        "id": 6,
+        "user_id": 2,
+        "name": "Nura",
+        "salary": 20000000,
+        "department": "IT",
+        "worked_since": 2026,
+        "created_at": "2026-05-20 15:52:37"
+    }
+]

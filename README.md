@@ -1,34 +1,22 @@
-# IP2 Assignment 4 - Telegram Bot with Flask
+# IP2 Final Exam - Admin Panel with Authentication
 
 ## Project Description
 
-This project is a webhook-powered Telegram bot for **Introduction to Programming 2 (Python), Assignment 4**.
+This is a Flask admin panel for the IP2 Final Exam. It extends the previous employee records project with authentication, authorization, role-based dashboards, JSON storage, and Telegram admin notifications.
 
-The bot manages employee records from the previous Assignment 3 topic and demonstrates:
+## Features
 
-- Flask webhook server
-- pyTelegramBotAPI
-- Object-Oriented Programming
-- modules and packages
-- decorators
-- generators
-- regular expressions
-- JSON file storage
-
-## Topic
-
-**Group 4 - Employee**
-
-Each employee record contains:
-
-| Field | Description |
-| --- | --- |
-| id | Auto-incremented employee ID |
-| user_id | Telegram user who saved the employee |
-| name | Employee name |
-| salary | Employee salary |
-| department | Department name |
-| worked_since | Year when the employee started working |
+- Login, logout, and registration with Flask sessions.
+- Two roles: `admin` and `user`.
+- Admin dashboard with total users, total records, and recent users.
+- Admin user management: list, create, delete users.
+- Admin records page with pagination.
+- User dashboard with the logged-in user's own records.
+- User profile page with password update.
+- Passwords are hashed with SHA-256 using `hashlib`.
+- Telegram notification service for new registrations and admin actions.
+- Plain HTML/CSS/JS frontend with Jinja2 template inheritance.
+- Client-side validation, delete confirmation, and fetch-based user search.
 
 ## Project Structure
 
@@ -36,90 +24,100 @@ Each employee record contains:
 My_project/
 ├── app.py
 ├── config.py
-├── employees.json
 ├── requirements.txt
-└── bot/
-    ├── __init__.py
-    ├── handlers.py
-    ├── models.py
-    └── utils.py
+├── users.json
+├── records.json
+├── controllers/
+│   ├── auth.py
+│   ├── admin.py
+│   └── user.py
+├── models/
+│   ├── user.py
+│   └── record.py
+├── services/
+│   ├── db_service.py
+│   └── bot_service.py
+├── templates/
+│   ├── base.html
+│   ├── auth/
+│   ├── admin/
+│   ├── user/
+│   └── errors/
+└── static/
+    ├── css/style.css
+    └── js/main.js
 ```
 
-## Requirements Coverage
+## Default Accounts
 
-- `app.py` registers a Flask `POST /webhook` route.
-- `bot/models.py` contains `Person` and `Employee` classes.
-- `Employee` inherits from `Person`.
-- `Employee` uses encapsulation with a private `__salary` attribute and `salary` property.
-- `Employee` has custom method `to_dict()`.
-- `bot/utils.py` contains custom decorator `@log_command`.
-- `bot/utils.py` contains generator `fact_generator()`.
-- `bot/utils.py` uses regex in `is_valid_date()`.
-- `bot/handlers.py` implements all required commands and one bonus command.
+Admin account:
 
-## Bot Commands
-
-| Command | Description |
-| --- | --- |
-| `/start` | Welcome message |
-| `/help` | List all commands |
-| `/echo text` | Reply with the same text |
-| `/save Name Salary Department Year` | Save an employee |
-| `/list` | List employees saved by the current Telegram user |
-| `/fact` | Return the next fact from the generator |
-| `/validate YYYY-MM-DD` | Validate date format using regex |
-| `/about` | Show bot info and demonstrate OOP `__str__` |
-| `/custom text` | Bonus: translate simple text to Mandarin Chinese |
-
-## Setup
-
-1. Create and activate a virtual environment.
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate
+```text
+username: admin
+password: admin123
 ```
 
-2. Install dependencies.
+User account:
 
-```bash
-pip install -r My_project/requirements.txt
+```text
+username: testuser
+password: user123
 ```
 
-3. Create a Telegram bot with BotFather and put your data in `My_project/config.py`.
-
-```python
-BOT_TOKEN = "YOUR_REAL_BOT_TOKEN"
-WEBHOOK_URL = "https://your-ngrok-url.ngrok-free.app/webhook"
-```
-
-4. Start ngrok.
-
-```bash
-ngrok http 5000
-```
-
-5. Run Flask.
+## How to Run
 
 ```bash
 cd My_project
+pip install -r requirements.txt
 python app.py
 ```
 
-## Mode
+Open:
 
-This submitted version uses **webhook mode** with Flask.
+```text
+http://127.0.0.1:5000
+```
 
-## Submission Notes
+## Telegram Setup
 
-Before uploading the ZIP to Moodle:
+In `config.py`, replace placeholders only when demonstrating Telegram notifications:
 
-- Do not include a real Telegram bot token.
-- Keep a fake placeholder token such as `BOT_TOKEN = "0000000000:YOUR_BOT_TOKEN_HERE"` in submitted `config.py`.
-- Add screenshots or a short screen recording showing `/start`, `/save`, `/list`, and `/validate`.
+```python
+class Config:
+    BOT_TOKEN = "YOUR_REAL_BOT_TOKEN"
+    CHAT_ID = "YOUR_ADMIN_CHAT_ID"
+```
 
-## Group
+Do not submit real tokens to Moodle. If the bot token or chat ID is wrong, the Flask app logs the error and continues working.
 
-SE-2508
+## Criteria Coverage
 
-Group members: Umirgaliyev Yernar, Bekpatsha Akerke, Bolatbek Nurakhmet, Yessetaiuly Inal
+- T1: `User`, `Record`, and `DatabaseService` are implemented with `to_dict()` and `from_dict()`.
+- T2: `AuthController` handles login, logout, registration, sessions, and `login_required`.
+- T3: `AdminController` handles admin dashboard, users, records, role checks, and bot notifications.
+- T4: `UserController` handles profile, password update, own records, and record creation.
+- T5: Templates extend `base.html`; custom CSS and JS are in `static/`.
+- T6: `BotService` sends Telegram notifications and catches errors.
+
+## Defense Notes
+
+Session stores:
+
+```text
+user_id, username, role
+```
+
+Deleting a user also deletes all records with the same `user_id` from `records.json`.
+
+Duplicate usernames are blocked in `DatabaseService.add_user()`.
+
+Passwords are never stored as plain text; `User.hash_password()` creates SHA-256 hashes.
+
+## Submission
+
+Do not include:
+
+- `venv/`
+- `__pycache__/`
+- `.env`
+- real Telegram tokens

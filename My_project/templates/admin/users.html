@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>User Management</h1>
+    <p class="muted">Create users, search accounts, and remove users with their records.</p>
+</section>
+
+{% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+
+<section class="panel">
+    <h2>Create User</h2>
+    <form action="{{ url_for('admin_create_user') }}" method="post" class="grid-form validate-auth-form">
+        <label>Username
+            <input type="text" name="username" minlength="3" required>
+        </label>
+        <label>Password
+            <input type="password" name="password" minlength="6" required>
+        </label>
+        <label>Role
+            <select name="role" required>
+                <option value="user">user</option>
+                <option value="admin">admin</option>
+            </select>
+        </label>
+        <button type="submit" class="button">Create</button>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="panel-title-row">
+        <h2>All Users</h2>
+        <input id="userSearch" type="search" placeholder="Search users">
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Created At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="usersTableBody">
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.created_at }}</td>
+                <td>
+                    <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="post" class="inline-form delete-form">
+                        <button type="submit" class="button danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

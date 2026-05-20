@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "username": "admin",
+        "password_hash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+        "role": "admin",
+        "created_at": "2026-05-20 10:00:00"
+    },
+    {
+        "id": 2,
+        "username": "testuser",
+        "password_hash": "e606e38b0d8c19b24cf0ee3808183162ea7cd63ff7912dbb22b5e803286b4446",
+        "role": "user",
+        "created_at": "2026-05-20 10:05:00"
+    },
+    {
+        "id": 3,
+        "username": "Inal",
+        "password_hash": "6215461d3b2f3ffc42061b571eab806d26ba4e53d9823105862861e04cdcc2bd",
+        "role": "admin",
+        "created_at": "2026-05-20 15:50:28"
+    },
+    {
+        "id": 4,
+        "username": "Ernar",
+        "password_hash": "c53e827ac24e6a811400c2975e84bdacfb4f2a14959006eb4bbcc58ca0d689d3",
+        "role": "admin",
+        "created_at": "2026-05-20 15:54:08"
+    }
+]

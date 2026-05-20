@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Profile</h1>
+    <p class="muted">Account details and password update.</p>
+</section>
+
+{% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+{% if success %}<div class="alert success">{{ success }}</div>{% endif %}
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span>Username</span>
+        <strong>{{ profile.username }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Role</span>
+        <strong>{{ profile.role }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Records</span>
+        <strong>{{ record_count }}</strong>
+    </article>
+</section>
+
+<section class="panel">
+    <h2>Account Info</h2>
+    <p><strong>Created at:</strong> {{ profile.created_at }}</p>
+</section>
+
+<section class="panel">
+    <h2>Change Password</h2>
+    <form method="post" class="form-card validate-auth-form">
+        <label>New Password
+            <input type="password" name="password" minlength="6" required>
+        </label>
+        <button type="submit" class="button">Update Password</button>
+    </form>
+</section>
+{% endblock %}

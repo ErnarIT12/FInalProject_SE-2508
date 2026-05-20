@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Records{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>All Records</h1>
+    <p class="muted">Paginated employee records from all users.</p>
+</section>
+
+<section class="panel">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Salary</th>
+                <th>Department</th>
+                <th>Worked Since</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.user_id }}</td>
+                <td>{{ record.name }}</td>
+                <td>{{ record.salary }}</td>
+                <td>{{ record.department }}</td>
+                <td>{{ record.worked_since }}</td>
+                <td>{{ record.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% if page > 1 %}
+            <a class="button secondary" href="{{ url_for('admin_data', page=page - 1) }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page }} of {{ pages }}</span>
+        {% if page < pages %}
+            <a class="button secondary" href="{{ url_for('admin_data', page=page + 1) }}">Next</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

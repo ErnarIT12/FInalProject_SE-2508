@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Forbidden{% endblock %}
+
+{% block content %}
+<section class="auth-panel">
+    <h1>403</h1>
+    <p class="muted">You do not have permission to open this page.</p>
+    <a class="button" href="{{ url_for('index') }}">Back to Dashboard</a>
+</section>
+{% endblock %}
