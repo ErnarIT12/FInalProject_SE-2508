@@ -16,7 +16,8 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = Config.SECRET_KEY
 
 db_service = DatabaseService(Config.DB_PATH)
-bot_service = BotService(Config.BOT_TOKEN, Config.CHAT_ID)
+bot_settings = db_service.get_bot_settings(Config.BOT_TOKEN, Config.CHAT_ID)
+bot_service = BotService(bot_settings["bot_token"], bot_settings["chat_id"])
 auth_controller = AuthController(db_service, bot_service)
 admin_controller = AdminController(db_service, bot_service)
 user_controller = UserController(db_service)
@@ -112,7 +113,45 @@ def admin_delete_user(user_id):
 def admin_data():
     page = max(int(request.args.get("page", 1)), 1)
     records, pages = admin_controller.paginated_records(page)
-    return render_template("admin/data.html", records=records, page=page, pages=pages)
+    users = admin_controller.list_users()
+    return render_template("admin/data.html", records=records, users=users, page=page, pages=pages, error=None)
+
+
+@app.route("/admin/data/create", methods=["POST"])
+@login_required(role="admin")
+def admin_create_record():
+    try:
+        admin_controller.create_record(request.form)
+        flash("Record created successfully.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin_data"))
+
+
+@app.route("/admin/data/delete/<int:record_id>", methods=["POST"])
+@login_required(role="admin")
+def admin_delete_record(record_id):
+    try:
+        admin_controller.delete_record(record_id)
+        flash("Record deleted successfully.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin_data"))
+
+
+@app.route("/admin/bot-settings", methods=["GET", "POST"])
+@login_required(role="admin")
+def admin_bot_settings():
+    if request.method == "POST":
+        settings = admin_controller.update_bot_settings(
+            request.form.get("bot_token", ""),
+            request.form.get("chat_id", "")
+        )
+        flash("Telegram bot settings updated.", "success")
+        return render_template("admin/bot_settings.html", settings=settings)
+
+    settings = admin_controller.get_bot_settings(Config.BOT_TOKEN, Config.CHAT_ID)
+    return render_template("admin/bot_settings.html", settings=settings)
 
 
 @app.route("/api/admin/users")
@@ -144,18 +183,6 @@ def telegram_webhook():
 def user_dashboard():
     records = user_controller.get_my_records(session["user_id"])
     return render_template("user/dashboard.html", records=records, error=None)
-
-
-@app.route("/user/records/add", methods=["POST"])
-@login_required()
-def user_add_record():
-    try:
-        user_controller.create_record(session["user_id"], request.form)
-        flash("Record added successfully.", "success")
-        return redirect(url_for("user_dashboard"))
-    except ValueError as exc:
-        records = user_controller.get_my_records(session["user_id"])
-        return render_template("user/dashboard.html", records=records, error=str(exc))
 
 
 @app.route("/user/profile", methods=["GET", "POST"])

@@ -20,14 +20,5 @@ class UserController:
     def get_my_records(self, user_id):
         return self.db.get_records_by_user(user_id)
 
-    def create_record(self, user_id, form_data):
-        return self.db.add_record(
-            user_id=user_id,
-            name=form_data.get("name", ""),
-            salary=form_data.get("salary", 0),
-            department=form_data.get("department", ""),
-            worked_since=form_data.get("worked_since", 0)
-        )
-
     def record_count(self, user_id):
         return self.db.count_records_by_user(user_id)

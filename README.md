@@ -10,8 +10,9 @@ This is a Flask admin panel for the IP2 Final Exam. It extends the previous empl
 - Two roles: `admin` and `user`.
 - Admin dashboard with total users, total records, and recent users.
 - Admin user management: list, create, delete users.
-- Admin records page with pagination.
-- User dashboard with the logged-in user's own records.
+- Admin records management: create, delete, and view all records.
+- Admin Telegram bot settings page for notification token and chat ID.
+- User dashboard with read-only access to the logged-in user's own records.
 - User profile page with password update.
 - Passwords are hashed with SHA-256 using `hashlib`.
 - Telegram notification service for new registrations and admin actions.
@@ -121,3 +122,4 @@ Do not include:
 - `__pycache__/`
 - `.env`
 - real Telegram tokens
+- `bot_config.json` with real Telegram settings

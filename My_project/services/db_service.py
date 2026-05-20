@@ -10,6 +10,7 @@ class DatabaseService:
         self.db_path = db_path
         self.users_file = os.path.join(db_path, "users.json")
         self.records_file = os.path.join(db_path, "records.json")
+        self.bot_config_file = os.path.join(db_path, "bot_config.json")
         self.seed()
 
     def seed(self):
@@ -26,6 +27,8 @@ class DatabaseService:
                 Record(3, 1, "Madi Tulegen", 1000000, "Management", 2019).to_dict()
             ]
             self._write_json(self.records_file, records)
+        if not os.path.exists(self.bot_config_file):
+            self._write_json(self.bot_config_file, {"bot_token": "", "chat_id": ""})
 
     def _read_json(self, path):
         if not os.path.exists(path):
@@ -99,8 +102,33 @@ class DatabaseService:
         self.save_records(records)
         return record
 
+    def delete_record(self, record_id):
+        record_id = int(record_id)
+        records = self.list_records()
+        remaining_records = [record for record in records if record.id != record_id]
+        if len(remaining_records) == len(records):
+            raise ValueError("Record not found")
+        self.save_records(remaining_records)
+
     def get_records_by_user(self, user_id):
         return [record for record in self.list_records() if record.user_id == int(user_id)]
 
     def count_records_by_user(self, user_id):
         return len(self.get_records_by_user(user_id))
+
+    def get_bot_settings(self, default_token="", default_chat_id=""):
+        data = self._read_json(self.bot_config_file)
+        if not isinstance(data, dict):
+            data = {}
+        return {
+            "bot_token": data.get("bot_token") or default_token,
+            "chat_id": data.get("chat_id") or default_chat_id
+        }
+
+    def save_bot_settings(self, bot_token, chat_id):
+        settings = {
+            "bot_token": bot_token.strip(),
+            "chat_id": chat_id.strip()
+        }
+        self._write_json(self.bot_config_file, settings)
+        return settings

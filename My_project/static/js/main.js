@@ -1,4 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.querySelector("#confirmModal");
+    const modalTitle = document.querySelector("#confirmTitle");
+    const modalMessage = document.querySelector("#confirmMessage");
+    const modalCancel = document.querySelector("#confirmCancel");
+    const modalAccept = document.querySelector("#confirmAccept");
+    let pendingDeleteForm = null;
+
+    const openConfirmModal = (form) => {
+        pendingDeleteForm = form;
+        modalTitle.textContent = form.dataset.confirmTitle || "Confirm delete?";
+        modalMessage.textContent = form.dataset.confirmMessage || "This action cannot be undone.";
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+    };
+
+    const closeConfirmModal = () => {
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+        pendingDeleteForm = null;
+    };
+
     const attachDeleteConfirmations = () => {
         document.querySelectorAll(".delete-form").forEach((form) => {
             if (form.dataset.confirmAttached === "true") {
@@ -6,12 +27,32 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             form.dataset.confirmAttached = "true";
             form.addEventListener("submit", (event) => {
-                if (!confirm("Delete this user and all related records?")) {
-                    event.preventDefault();
-                }
+                event.preventDefault();
+                openConfirmModal(form);
             });
         });
     };
+
+    if (modalCancel && modalAccept) {
+        modalCancel.addEventListener("click", closeConfirmModal);
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                closeConfirmModal();
+            }
+        });
+        modalAccept.addEventListener("click", () => {
+            if (pendingDeleteForm) {
+                pendingDeleteForm.submit();
+            }
+        });
+    }
+
+    document.querySelectorAll(".flash-stack .alert").forEach((alert) => {
+        setTimeout(() => {
+            alert.classList.add("hide");
+            setTimeout(() => alert.remove(), 300);
+        }, 4000);
+    });
 
     document.querySelectorAll(".validate-auth-form").forEach((form) => {
         form.addEventListener("submit", (event) => {
@@ -43,17 +84,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const renderUsers = (users) => {
             if (users.length === 0) {
-                usersTableBody.innerHTML = "<tr><td colspan=\"5\" class=\"table-state\">No users found.</td></tr>";
+                usersTableBody.innerHTML = "<tr><td colspan=\"5\"><div class=\"empty-state\"><strong>No users found.</strong><span>Try a different search query.</span></div></td></tr>";
                 return;
             }
             usersTableBody.innerHTML = users.map((user) => `
                 <tr>
                     <td>${user.id}</td>
                     <td>${user.username}</td>
-                    <td>${user.role}</td>
+                    <td><span class="badge ${user.role}">${user.role}</span></td>
                     <td>${user.created_at}</td>
                     <td>
-                        <form action="/admin/users/delete/${user.id}" method="post" class="inline-form delete-form">
+                        <form action="/admin/users/delete/${user.id}" method="post" class="inline-form delete-form" data-confirm-title="Delete user?" data-confirm-message="This will also delete all records owned by this user.">
                             <button type="submit" class="button danger">Delete</button>
                         </form>
                     </td>
@@ -65,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         searchInput.addEventListener("input", () => {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(async () => {
-            const query = encodeURIComponent(searchInput.value.trim());
+                const query = encodeURIComponent(searchInput.value.trim());
                 usersTableBody.innerHTML = "<tr><td colspan=\"5\" class=\"table-state\">Searching...</td></tr>";
 
                 try {

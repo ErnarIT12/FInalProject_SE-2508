@@ -26,5 +26,8 @@ Main criteria implemented:
 - Auth controller and `login_required`: `controllers/auth.py`
 - Admin controller: `controllers/admin.py`
 - User controller: `controllers/user.py`
+- Admin-only record create/delete: `/admin/data`
+- Admin Telegram settings: `/admin/bot-settings`
+- User dashboard is read-only: `/user/dashboard`
 - Jinja templates: `templates/`
 - Custom CSS/JS: `static/`

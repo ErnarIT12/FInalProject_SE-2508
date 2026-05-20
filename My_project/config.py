@@ -12,4 +12,3 @@ class Config:
 # Backward-compatible constants for the Assignment 4 bot package.
 BOT_TOKEN = Config.BOT_TOKEN
 WEBHOOK_URL = "https://inconstant-jacinta-syllabically.ngrok-free.dev/webhook"
-

@@ -49,12 +49,21 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.role }}</td>
+                <td><span class="badge {{ user.role }}">{{ user.role }}</span></td>
                 <td>{{ user.created_at }}</td>
                 <td>
-                    <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="post" class="inline-form delete-form">
+                    <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="post" class="inline-form delete-form" data-confirm-title="Delete user?" data-confirm-message="This will also delete all records owned by this user.">
                         <button type="submit" class="button danger">Delete</button>
                     </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">
+                    <div class="empty-state">
+                        <strong>No users found.</strong>
+                        <span>Create the first account using the form above.</span>
+                    </div>
                 </td>
             </tr>
             {% endfor %}

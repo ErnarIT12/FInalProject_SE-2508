@@ -35,7 +35,7 @@
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.role }}</td>
+                <td><span class="badge {{ user.role }}">{{ user.role }}</span></td>
                 <td>{{ user.created_at }}</td>
             </tr>
             {% endfor %}

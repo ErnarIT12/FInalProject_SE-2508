@@ -5,29 +5,10 @@
 {% block content %}
 <section class="page-header">
     <h1>User Dashboard</h1>
-    <p class="muted">Your own employee records only.</p>
+    <p class="muted">Your account is read-only. You can view your own employee records here.</p>
 </section>
 
 {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
-
-<section class="panel">
-    <h2>Add Record</h2>
-    <form action="{{ url_for('user_add_record') }}" method="post" class="grid-form">
-        <label>Name
-            <input type="text" name="name" required>
-        </label>
-        <label>Salary
-            <input type="number" name="salary" min="1" max="50000000" required>
-        </label>
-        <label>Department
-            <input type="text" name="department" required>
-        </label>
-        <label>Worked Since
-            <input type="number" name="worked_since" min="1900" max="2026" required>
-        </label>
-        <button type="submit" class="button">Add Record</button>
-    </form>
-</section>
 
 <section class="panel">
     <h2>My Records</h2>
@@ -47,14 +28,19 @@
             <tr>
                 <td>{{ record.id }}</td>
                 <td>{{ record.name }}</td>
-                <td>{{ record.salary }}</td>
+                <td>{{ "{:,}".format(record.salary) }} KZT</td>
                 <td>{{ record.department }}</td>
                 <td>{{ record.worked_since }}</td>
                 <td>{{ record.created_at }}</td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="6">No records yet.</td>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <strong>No records assigned yet.</strong>
+                        <span>Only an administrator can create records for your account.</span>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
